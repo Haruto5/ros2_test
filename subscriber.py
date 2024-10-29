@@ -1,25 +1,27 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from std_msgs.msg import Float32MultiArray
 
-class HelloWorldSubscriber(Node):
+class FloatArraySubscriber(Node):
     def __init__(self):
-        super().__init__('hello_world_subscriber')
+        super().__init__('float_array_subscriber')
+        # Publisherで指定したトピック名に合わせる
         self.subscription = self.create_subscription(
-            String,
-            'hello_topic',
+            Float32MultiArray,
+            'float_array_topic',
             self.listener_callback,
             10)
-        self.subscription
+        self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        self.get_logger().info(f'Received: "{msg.data}"')
+        # 受け取った配列データを表示
+        self.get_logger().info(f'Received: {msg.data}')
 
 def main(args=None):
     rclpy.init(args=args)
-    node = HelloWorldSubscriber()
-    rclpy.spin(node)
-    node.destroy_node()
+    float_array_subscriber = FloatArraySubscriber()
+    rclpy.spin(float_array_subscriber)
+    float_array_subscriber.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
